@@ -1,4 +1,8 @@
 export interface LocaleMessages {
+  cat: {
+    pet: string;
+    greeting: string;
+  };
   common: {
     all: string;
     copyToClipboard: string;
@@ -30,6 +34,7 @@ export interface LocaleMessages {
     about: string;
     news: string;
     selectedPublications: string;
+    publicationsComingSoon: string;
     viewAll: string;
   };
   publications: {
@@ -49,6 +54,10 @@ export interface LocaleMessages {
 }
 
 const en: LocaleMessages = {
+  cat: {
+    pet: 'Say hello to the cat',
+    greeting: 'One little discovery at a time, meow! 🐾',
+  },
   common: {
     all: 'All',
     copyToClipboard: 'Copy to clipboard',
@@ -74,12 +83,13 @@ const en: LocaleMessages = {
     researchInterests: 'Research Interests',
     like: 'Like',
     liked: 'Liked',
-    thanks: 'Thanks!',
+    thanks: 'Thanks for cheering me on! 🐾',
   },
   home: {
     about: 'About',
     news: 'News',
     selectedPublications: 'Selected Publications',
+    publicationsComingSoon: 'Looking forward to my first publication. Stay tuned! 💪',
     viewAll: 'View All',
   },
   publications: {
@@ -99,6 +109,10 @@ const en: LocaleMessages = {
 };
 
 const zh: LocaleMessages = {
+  cat: {
+    pet: '摸摸猫猫',
+    greeting: '今天也要好好科研喵 🐾',
+  },
   common: {
     all: '全部',
     copyToClipboard: '复制到剪贴板',
@@ -124,12 +138,13 @@ const zh: LocaleMessages = {
     researchInterests: '研究兴趣',
     like: '点赞',
     liked: '已点赞',
-    thanks: '感谢支持！',
+    thanks: '收到你的鼓励啦！🐾',
   },
   home: {
     about: '关于我',
     news: '动态',
     selectedPublications: '精选论文',
+    publicationsComingSoon: '期待我的第一篇论文发表，敬请期待～💪',
     viewAll: '查看全部',
   },
   publications: {

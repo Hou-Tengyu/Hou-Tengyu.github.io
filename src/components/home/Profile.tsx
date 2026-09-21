@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import {
     EnvelopeIcon,
@@ -36,6 +36,7 @@ interface ProfileProps {
 
 export default function Profile({ author, social, features, researchInterests }: ProfileProps) {
     const messages = useMessages();
+    const reducedMotion = useReducedMotion();
 
     const [hasLiked, setHasLiked] = useState(false);
     const [showThanks, setShowThanks] = useState(false);
@@ -55,6 +56,12 @@ export default function Profile({ author, social, features, researchInterests }:
         }
     }, [features.enable_likes]);
 
+    useEffect(() => {
+        if (!showThanks) return;
+        const timer = window.setTimeout(() => setShowThanks(false), 2000);
+        return () => window.clearTimeout(timer);
+    }, [showThanks]);
+
     const handleLike = () => {
         const newLikedState = !hasLiked;
         setHasLiked(newLikedState);
@@ -62,7 +69,6 @@ export default function Profile({ author, social, features, researchInterests }:
         if (newLikedState) {
             localStorage.setItem('jiale-website-user-liked', 'true');
             setShowThanks(true);
-            setTimeout(() => setShowThanks(false), 2000);
         } else {
             localStorage.removeItem('jiale-website-user-liked');
             setShowThanks(false);
@@ -118,7 +124,7 @@ export default function Profile({ author, social, features, researchInterests }:
                     alt={author.name}
                     width={256}
                     height={256}
-                    className="w-full h-full object-cover object-[32%_center]"
+                    className="w-full h-full object-cover object-center"
                     priority
                 />
             </div>
@@ -133,6 +139,21 @@ export default function Profile({ author, social, features, researchInterests }:
                 </p>
                 <p className="text-neutral-600 mb-2">
                     {author.institution}
+                    {author.lab && (
+                        <>
+                            {' · '}
+                            {author.lab_url ? (
+                                <a
+                                    href={author.lab_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-accent hover:text-accent-dark underline underline-offset-4 decoration-accent/40 hover:decoration-accent transition-colors"
+                                >
+                                    {author.lab}
+                                </a>
+                            ) : author.lab}
+                        </>
+                    )}
                 </p>
             </div>
 
@@ -320,6 +341,8 @@ export default function Profile({ author, social, features, researchInterests }:
                 <div className="flex justify-center">
                     <div className="relative">
                         <motion.button
+                            type="button"
+                            aria-pressed={hasLiked}
                             onClick={handleLike}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
@@ -336,16 +359,23 @@ export default function Profile({ author, social, features, researchInterests }:
                             <span>{hasLiked ? messages.profile.liked : messages.profile.like}</span>
                         </motion.button>
 
+                        {showThanks && !reducedMotion && (
+                            <span className="paw-burst" aria-hidden="true">
+                                <span>🐾</span><span>🐾</span><span>🐾</span>
+                            </span>
+                        )}
+
                         {/* Thanks bubble */}
                         <AnimatePresence>
                             {showThanks && (
                                 <motion.div
-                                    initial={{ opacity: 0, y: 10, scale: 0.8 }}
-                                    animate={{ opacity: 1, y: -10, scale: 1 }}
-                                    exit={{ opacity: 0, y: -20, scale: 0.8 }}
-                                    className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-accent text-white px-4 py-2 rounded-lg text-sm font-medium shadow-lg whitespace-nowrap"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    role="status"
+                                    className="pointer-events-none absolute bottom-full mb-3 left-1/2 -translate-x-1/2 bg-accent text-white px-4 py-2 rounded-lg text-sm font-medium shadow-lg whitespace-nowrap"
                                 >
-                                    {messages.profile.thanks} 😊
+                                    {messages.profile.thanks}
                                     <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-accent"></div>
                                 </motion.div>
                             )}

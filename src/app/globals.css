@@ -175,6 +175,7 @@ html[data-locale^="zh"] {
 
 
 body {
+  isolation: isolate;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
@@ -182,6 +183,114 @@ body {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* The art stays behind content; only the cat's small hit area is interactive. */
+body::before,
+.cat-companion {
+  position: fixed;
+  right: clamp(12px, 3vw, 64px);
+  bottom: 20px;
+  width: clamp(160px, 23vw, 320px);
+  aspect-ratio: 8 / 9;
+  pointer-events: none;
+}
+
+body::before {
+  content: "";
+  background-color: var(--accent-dark);
+  -webkit-mask: url('/cat-superhero.png') center / contain no-repeat;
+  mask: url('/cat-superhero.png') center / contain no-repeat;
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.cat-companion { z-index: 20; }
+.cat-pet-target {
+  position: absolute;
+  left: 28%;
+  top: 46%;
+  width: 45%;
+  height: 38%;
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 45%;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+.cat-pet-target:focus-visible {
+  outline: 2px dashed var(--accent);
+  outline-offset: 4px;
+}
+.cat-greeting {
+  position: absolute;
+  right: 0;
+  bottom: 88%;
+  width: max-content;
+  max-width: min(250px, calc(100vw - 32px));
+  padding: 12px 16px;
+  border: 1px solid var(--accent-light);
+  border-radius: 16px 16px 4px 16px;
+  background: var(--background);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.cat-greeting:empty { display: none; }
+body:has(.cat-companion[data-active="true"])::before {
+  animation: cat-wiggle 650ms ease-in-out;
+}
+@keyframes cat-wiggle {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-4deg); }
+  65% { transform: rotate(4deg); }
+}
+.paw-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.paw-burst span {
+  position: absolute;
+  left: calc(50% - 10px);
+  top: 0;
+  font-size: 20px;
+  opacity: 0;
+  animation: paw-float 1100ms ease-out both;
+}
+.paw-burst span:nth-child(1) { --paw-x: -65px; --paw-angle: -25deg; }
+.paw-burst span:nth-child(2) { --paw-x: 0px; --paw-angle: 10deg; animation-delay: 100ms; }
+.paw-burst span:nth-child(3) { --paw-x: 65px; --paw-angle: 30deg; animation-delay: 180ms; }
+@keyframes paw-float {
+  0% { opacity: 0; transform: translate(0, 0) scale(.6); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--paw-x), -90px) rotate(var(--paw-angle)) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body:has(.cat-companion[data-active="true"])::before,
+  .paw-burst span { animation: none; }
+}
+
+@media (max-width: 640px) {
+  body::before,
+  .cat-companion {
+    width: 150px;
+    right: 8px;
+    bottom: 16px;
+  }
+  body::before { opacity: 0.12; }
+}
+
+@media print {
+  body::before,
+  .cat-companion {
+    display: none;
+  }
 }
 
 /* Typography utilities */

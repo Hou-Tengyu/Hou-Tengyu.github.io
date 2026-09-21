@@ -33,6 +33,13 @@ export default function SelectedPublications({ publications, title, enableOnePag
                 </Link>
             </div>
             <div className="space-y-4">
+                {publications.length === 0 && (
+                    <div className="bg-neutral-50 dark:bg-neutral-800 p-6 rounded-lg shadow-sm border border-neutral-200 dark:border-[rgba(148,163,184,0.24)]">
+                        <p className="text-neutral-600 dark:text-neutral-500 leading-relaxed">
+                            {messages.home.publicationsComingSoon}
+                        </p>
+                    </div>
+                )}
                 {publications.map((pub, index) => (
                     <motion.div
                         key={pub.id}

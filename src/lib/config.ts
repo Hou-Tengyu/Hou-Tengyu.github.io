@@ -14,6 +14,8 @@ export interface SiteConfig {
     name: string;
     title: string;
     institution: string;
+    lab?: string;
+    lab_url?: string;
     avatar: string;
   };
   social: {

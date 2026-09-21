@@ -3,9 +3,10 @@ title = "关于我"
 
 [profile]
 research_interests = [
-  "计算物理",
-  "数学原理",
-  "定理证明"
+  "计算机视觉",
+  "图像编辑与生成",
+  "视频生成",
+  "世界模型"
 ]
 
 [[sections]]
@@ -17,7 +18,7 @@ title = "关于我"
 [[sections]]
 id = "featured_publications"
 type = "publications"
-title = "精选论文"
+title = "论文"
 filter = "selected"
 limit = 5
 
